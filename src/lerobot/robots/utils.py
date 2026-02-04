@@ -57,6 +57,10 @@ def make_robot_from_config(config: RobotConfig) -> Robot:
         from .piper_follower import PIPERFollower
 
         return PIPERFollower(config)
+    elif config.type == "ARX5_follower":
+        from .arx5_follower import ARX5Follower
+
+        return ARX5Follower(config)
     else:
         raise ValueError(config.type)
 

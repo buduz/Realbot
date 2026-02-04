@@ -57,5 +57,9 @@ def make_teleoperator_from_config(config: TeleoperatorConfig) -> Teleoperator:
         from .piper_leader import PIPERLeader
 
         return PIPERLeader(config)
+    elif config.type == "ARX5_leader":
+        from .arx5_leader import ARX5Leader
+
+        return ARX5Leader(config)
     else:
         raise ValueError(config.type)

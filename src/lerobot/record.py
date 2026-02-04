@@ -37,11 +37,10 @@ python -m lerobot.record \
 Example teleoperation with piper:
 
 ```shell
-
 python -m lerobot.record \
   --robot.type=piper_follower \
   --robot.id=piper_follower \
-  --robot.cameras='{image: {"type": "intelrealsense", "serial_number_or_name": "317422074519", "width": 640, "height": 360, "fps": 30}, wristimage: {"type": "intelrealsense", "serial_number_or_name": "317422075321", "width": 640, "height": 360, "fps": 30}}' \
+  --robot.cameras='{image: {"type": "intelrealsense", "serial_number_or_name": "317422074519", "width": 640, "height": 480, "fps": 30}, wrist_image: {"type": "intelrealsense", "serial_number_or_name": "317422075321", "width": 640, "height": 480, "fps": 30}}' \
   --teleop.type=piper_leader \
   --teleop.id=piper_leader \
   --display_data=true \
@@ -49,22 +48,39 @@ python -m lerobot.record \
   --dataset.num_episodes=2 \
   --dataset.push_to_hub=false \
   --dataset.single_task="Test piper"
+```
+
+Example teleoperation with arx5:
+
+```shell
+python -m lerobot.record \
+    --robot.type=ARX5_follower \
+    --robot.id=ARX5_follower \
+    --robot.cameras='{image: {"type": "intelrealsense", "serial_number_or_name": "420222071008", "width": 640, "height": 480, "fps": 30}, wrist_image: {"type": "intelrealsense", "serial_number_or_name": "348122070975", "width": 640, "height": 480, "fps": 30}}' \
+    --teleop.type=ARX5_leader \
+    --teleop.id=ARX5_leader \
+    --display_data=true \
+    --dataset.repo_id=test/arx5-red-cube-new \
+    --dataset.num_episodes=50 \
+    --dataset.push_to_hub=false \
+    --dataset.single_task="Pick the red cube."
+```
 
 """
 def debug_on():
     import sys
     sys.argv.extend([
-        "--robot.type=piper_follower",
-        "--robot.id=piper_follower",
-        "--teleop.type=piper_leader",
-        "--teleop.id=piper_leader",
+        "--robot.type=ARX5_follower",
+        "--robot.id=ARX5_follower",
+        "--teleop.type=ARX5_leader",
+        "--teleop.id=ARX5_leader",
         "--display_data=true",
-        '--dataset.repo_id=test/piper-test4',
-        '--dataset.num_episodes=2',
+        '--dataset.repo_id=test_0128/stack_cube',
+        '--dataset.num_episodes=4',
         '--dataset.push_to_hub=false',
-        '--dataset.single_task="Test piper"',
+        '--dataset.single_task="Stack the red cube on the blue cube"',
     ])
-# debug_on()
+debug_on()
 
 import logging
 import time
@@ -92,7 +108,8 @@ from lerobot.robots import (  # noqa: F401
     make_robot_from_config,
     so100_follower,
     so101_follower,
-    piper_follower,
+    # piper_follower,
+    arx5_follower
 )
 from lerobot.teleoperators import (  # noqa: F401
     Teleoperator,
@@ -101,7 +118,8 @@ from lerobot.teleoperators import (  # noqa: F401
     make_teleoperator_from_config,
     so100_leader,
     so101_leader,
-    piper_leader,
+    # piper_leader,
+    arx5_leader
 )
 from lerobot.teleoperators.keyboard.teleop_keyboard import KeyboardTeleop
 from lerobot.utils.control_utils import (
@@ -129,11 +147,11 @@ class DatasetRecordConfig:
     # Root directory where the dataset will be stored (e.g. 'dataset/path').
     root: str | Path | None = None
     # Limit the frames per second.
-    fps: int = 30
+    fps: int = 15
     # Number of seconds for data recording for each episode.
-    episode_time_s: int | float = 60
+    episode_time_s: int | float = 3600
     # Number of seconds for resetting the environment after each episode.
-    reset_time_s: int | float = 60
+    reset_time_s: int | float = 3600
     # Number of episodes to record.
     num_episodes: int = 50
     # Encode frames in the dataset into video

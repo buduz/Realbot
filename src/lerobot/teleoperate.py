@@ -31,26 +31,39 @@ python -m lerobot.teleoperate \
 
 Example teleoperation with piper:
 
+```shell
 python -m lerobot.teleoperate \
   --robot.type=piper_follower \
   --robot.id=piper_follower \
-  --robot.cameras='{image: {"type": "intelrealsense", "serial_number_or_name": "317422074519", "width": 640, "height": 360, "fps": 30}, wristimage: {"type": "intelrealsense", "serial_number_or_name": "317422075321", "width": 640, "height": 360, "fps": 30}}' \
+  --robot.cameras='{image: {"type": "intelrealsense", "serial_number_or_name": "317422074519", "width": 640, "height": 480, "fps": 30}, wrist_image: {"type": "intelrealsense", "serial_number_or_name": "317422075321", "width": 640, "height": 480, "fps": 30}}' \
   --teleop.type=piper_leader \
   --teleop.id=piper_leader \
   --display_data=true
+```
+
+Example teleoperation with arx5:
+
+```shell
+python -m lerobot.teleoperate \
+    --robot.type=ARX5_follower \
+    --robot.id=ARX5_follower \
+    --robot.cameras='{image: {"type": "intelrealsense", "serial_number_or_name": "420222071008", "width": 640, "height": 480, "fps": 30}, wrist_image: {"type": "intelrealsense", "serial_number_or_name": "348122070975", "width": 640, "height": 480, "fps": 30}}' \
+    --teleop.type=ARX5_leader \
+    --teleop.id=ARX5_leader \
+    --display_data=true
 ```
 
 """
 def debug_on():
     import sys
     sys.argv.extend([
-        "--robot.type=piper_follower",
-        "--robot.id=piper_follower",
-        "--teleop.type=piper_leader",
-        "--teleop.id=piper_leader",
+        "--robot.type=ARX5_follower",
+        "--robot.id=ARX5_follower",
+        "--teleop.type=ARX5_leader",
+        "--teleop.id=ARX5_leader",
         "--display_data=true",
     ])
-# debug_on()
+debug_on()
 
 import logging
 import time
@@ -69,7 +82,8 @@ from lerobot.robots import (  # noqa: F401
     make_robot_from_config,
     so100_follower,
     so101_follower,
-    piper_follower, #! 虽然没有使用，但是必须导入，否则会报输入参数错误
+    # piper_follower, #! 虽然没有使用，但是必须导入，否则会报输入参数错误
+    arx5_follower,  
 )
 from lerobot.teleoperators import (  # noqa: F401
     Teleoperator,
@@ -79,7 +93,8 @@ from lerobot.teleoperators import (  # noqa: F401
     make_teleoperator_from_config,
     so100_leader,
     so101_leader,
-    piper_leader,   #! 虽然没有使用，但是必须导入，否则会报输入参数错误
+    # piper_leader,   #! 虽然没有使用，但是必须导入，否则会报输入参数错误
+    arx5_leader
 )
 from lerobot.utils.robot_utils import busy_wait
 from lerobot.utils.utils import init_logging, move_cursor_up
