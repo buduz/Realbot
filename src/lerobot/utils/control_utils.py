@@ -144,7 +144,7 @@ def init_keyboard_listener():
     events["rerecord_episode"] = False
     events["stop_recording"] = False
     events["reinfer_episode"] = False
-    events['stop_reinferring'] = False
+    events['stop_reinferring'] = True
 
     if is_headless():
         logging.warning(
@@ -161,6 +161,7 @@ def init_keyboard_listener():
             if key == keyboard.Key.right:
                 print("Right arrow key pressed. Exiting loop...")
                 events["exit_early"] = True
+                events['stop_reinferring'] = not events['stop_reinferring']
             elif key == keyboard.Key.left:
                 print("Left arrow key pressed. Exiting loop and rerecord/reinferred the last episode...")
                 events["rerecord_episode"] = True
@@ -169,7 +170,7 @@ def init_keyboard_listener():
             elif key == keyboard.Key.esc:
                 print("Escape key pressed. Stopping data recording/inferring...")
                 events["stop_recording"] = True
-                events["stop_reinferring"] = True
+                # events["stop_reinferring"] = True
                 events["exit_early"] = True
         except Exception as e:
             print(f"Error handling key press: {e}")
